@@ -1,0 +1,17 @@
+div.added_attachment {
+  padding: 7px!important;
+  border: 1px solid #CCC!important;
+  margin: 7px!important;
+  border-left-width: 0;
+  border-right-width: 0;
+}
+p.attachment_details img {
+  float: left;
+  margin-right: 15px;
+  max-width: 70px;
+  max-height: 70px;
+}
+p.attachment_details {
+  overflow: hidden;
+  width: 100%;
+}

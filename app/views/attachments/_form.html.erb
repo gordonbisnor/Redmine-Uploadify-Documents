@@ -1,0 +1,58 @@
+<% if controller_name == 'documents' %>
+
+	<span id="attachments_fields">
+		<input id="file_upload" name="file_upload" type="file" />
+	</span>
+
+	<div id="added_attachments"></div>
+
+	<%- session_key = ActionController::Base.session_options[:key] %>
+
+	<% content_for :header_tags do %>
+		<link href="/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
+	  <%= stylesheet_link_tag 'uploadify', :plugin => 'a_redmine_uploadify_documents_plugin' %>
+		<script type="text/javascript" src="/uploadify/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+		<%= javascript_include_tag 'uploadify', :plugin => 'a_redmine_uploadify_documents_plugin' %>
+	
+		<script type="text/javascript">
+	
+			jQuery.noConflict();
+	
+			jQuery(document).ready(function() {
+	
+				var token = encodeURIComponent(encodeURIComponent(jQuery('[name=authenticity_token]').val()));
+	
+			  jQuery('#file_upload').uploadify({
+					'onComplete': function(event, ID, fileObj, response, data) {
+						RedmineUploadifyDocuments.AddAttachmentFields(fileObj, response);
+					},			
+					'multi': true,
+			    'uploader'  : '/uploadify/uploadify.swf',
+			    'script'    : '/uploads/create',
+			    'cancelImg' : '/uploadify/cancel.png',
+			    'auto'      : true,
+					'scriptData': { 
+						'<%= session_key %>' : encodeURIComponent('<%= u cookies[session_key] %>'),
+						authenticity_token : token
+						}
+			  });
+
+			});
+
+		</script>
+	<% end -%>
+
+<% else -%>
+
+	<span id="attachments_fields">
+	<%= file_field_tag 'attachments[1][file]', :size => 30, :id => nil  -%><label class="inline"><span id="attachment_description_label_content"><%= l(:label_optional_description) %></span><%= text_field_tag 'attachments[1][description]', '', :size => 60, :id => nil %>
+	</label>
+	</span>
+	<br />
+	<small><%= link_to l(:label_add_another_file), '#', :onclick => 'addFileField(); return false;' %>
+	(<%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>)
+	</small>
+
+<% end -%>

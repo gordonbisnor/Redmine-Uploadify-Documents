@@ -1,0 +1,36 @@
+<div class="contextual">
+<%= link_to_if_authorized l(:button_edit), {:controller => 'documents', :action => 'edit', :id => @document}, :class => 'icon icon-edit', :accesskey => accesskey(:edit) %>
+<%= link_to_if_authorized l(:button_delete), {:controller => 'documents', :action => 'destroy', :id => @document}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' %>
+</div>
+
+<h2><%=h @document.title %></h2>
+
+<p><em><%=h @document.category.name %><br />
+<%= format_date @document.created_on %></em></p>
+<div class="wiki">
+<%= textilizable @document.description, :attachments => @document.attachments %>
+</div>
+
+<h3><%= l(:label_attachment_plural) %></h3>
+<%= link_to_attachments @document %>
+
+<% if authorize_for('documents', 'add_attachment') %>
+<p><%= link_to l(:label_attachment_new), {}, :onclick => "Element.show('add_attachment_form'); Element.hide(this); Element.scrollTo('add_attachment_form'); return false;",
+                                             :id => 'attach_files_link' %></p>
+  <% form_tag({ :controller => 'uploadify_documents', :action => 'add_attachment', :id => @document }, :multipart => true, :id => "add_attachment_form", :style => "display:none;") do %>
+
+  <div class="box">
+		<p><em>*Note that you must press the “I’m Done” button when you are completed to save document and any  files that you have uploaded. Descriptions can be added in the provided fields as soon as file have been uploaded.</em></p>
+	
+  <p><%= render :partial => 'attachments/form' %></p>
+  </div>
+	<input type="image" src="/themes/lesite/images/im_done.png"/>
+	<br /><br />
+  <% end %> 
+<% end %>
+
+<% html_title @document.title -%>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'scm' %>
+<% end %>

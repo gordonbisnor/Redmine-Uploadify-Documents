@@ -1,0 +1,8 @@
+<h2><%=l(:label_document)%></h2>
+
+<% form_tag({:controller => "uploadify_documents", :action => 'edit', :id => @document}, :class => "tabular") do %>
+  <%= render :partial => 'form' %>
+	<input type="image" src="/themes/lesite/images/im_done.png"/><br />
+<% end %>
+
+
