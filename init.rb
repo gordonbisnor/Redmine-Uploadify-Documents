@@ -10,4 +10,3 @@ Redmine::Plugin.register :a_redmine_uploadify_documents_plugin do
  description 'Uploadify for documents'
  version '0.0.2'
 end
-

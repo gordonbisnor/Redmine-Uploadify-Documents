@@ -3,7 +3,11 @@ RedmineUploadifyDocuments
 
 Adds uploadify to document attachments
 
-Copyright (c) 2010 Gordon B. Isnor on behalf of Le Site, released under the LGPL license
+- layout requires csrf meta tag in <head>:
+
+<%= csrf_meta_tag %>
+
+Copyright (c) 2011 Gordon B. Isnor on behalf of Le Site, released under the LGPL license
 
 Gordon B. Isnor: http://www.isnorcreative.com
 
