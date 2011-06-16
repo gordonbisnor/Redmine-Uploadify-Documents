@@ -21,9 +21,20 @@
 			jQuery.noConflict();
 	
 			jQuery(document).ready(function() {
-	
-				var token = encodeURIComponent(encodeURIComponent(jQuery('[name=authenticity_token]').val()));
-	
+			
+			  // Create an empty object to store our custom script data
+				var uploadify_script_data = {};
+			  
+			  // Fetch the CSRF meta tag data
+			  var csrf_token = jQuery('meta[name=csrf-token]').attr('content');
+			  var csrf_param = jQuery('meta[name=csrf-param]').attr('content');
+		
+				uploadify_script_data[csrf_token] = encodeURI(encodeURI(csrf_param));
+					
+				uploadify_script_data['<%= session_key %>'] = encodeURIComponent('<%= u cookies[session_key] %>');
+		
+				uploadify_script_data[csrf_param] = encodeURI(encodeURIComponent(csrf_token));
+		
 			  jQuery('#file_upload').uploadify({
 					'onComplete': function(event, ID, fileObj, response, data) {
 						RedmineUploadifyDocuments.AddAttachmentFields(fileObj, response);
@@ -33,14 +44,11 @@
 			    'script'    : '/uploads/create',
 			    'cancelImg' : '/uploadify/cancel.png',
 			    'auto'      : true,
-					'scriptData': { 
-						'<%= session_key %>' : encodeURIComponent('<%= u cookies[session_key] %>'),
-						authenticity_token : token
-						}
+			    'scriptData': uploadify_script_data
 			  });
 
 			});
-
+	
 		</script>
 	<% end -%>
 
